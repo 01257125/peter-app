@@ -9,24 +9,24 @@ struct TacticalExplanationView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: 22) {
                     
                     // MARK: 1. Header Banner
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 8) {
                         Text("排球全方位戰術解析與觀念指南")
-                            .customVolleyballTitle(size: 20, weight: .bold)
+                            .customVolleyballTitle(size: 22, weight: .bold)
                             .foregroundColor(.white)
                         Text("統整「4號位強攻、A/B快攻、 Pipe後排跳攻與 3人接發球」等完整戰術圖文說明。")
-                            .font(.caption)
+                            .font(.subheadline)
                             .foregroundColor(.yellow)
-                            .lineSpacing(3)
+                            .lineSpacing(4)
                     }
                     .padding(.horizontal)
                     
-                    // MARK: 2. Unified Tactical Overview Card (寫在一起的統整戰術卡片)
-                    VStack(alignment: .leading, spacing: 14) {
+                    // MARK: 2. Unified Tactical Overview Card (寫在一起的統整戰術卡片 - 加大字體)
+                    VStack(alignment: .leading, spacing: 16) {
                         Text("戰術體系四大核心 (攻防一體)")
-                            .font(.headline.bold())
+                            .font(.title3.bold())
                             .foregroundColor(.yellow)
                             .padding(.horizontal)
                         
@@ -75,13 +75,14 @@ struct TacticalExplanationView: View {
                         )
                     }
                     
-                    // MARK: 3. Customizable Coach Notes (自訂教練筆記，可編輯/新增/刪除)
-                    VStack(alignment: .leading, spacing: 12) {
+                    // MARK: 3. Customizable Coach Notes (自訂教練筆記 - 加大字體清晰易讀)
+                    VStack(alignment: .leading, spacing: 14) {
                         HStack {
                             Image(systemName: "square.and.pencil")
+                                .font(.title3)
                                 .foregroundColor(.yellow)
                             Text("自訂戰術觀念與教練筆記")
-                                .font(.headline.bold())
+                                .font(.title3.bold())
                                 .foregroundColor(.white)
                             Spacer()
                             
@@ -94,7 +95,7 @@ struct TacticalExplanationView: View {
                                     Image(systemName: "plus.circle.fill")
                                     Text("新增筆記")
                                 }
-                                .font(.caption.bold())
+                                .font(.subheadline.bold())
                                 .foregroundColor(.yellow)
                             }
                         }
@@ -103,6 +104,7 @@ struct TacticalExplanationView: View {
                         if showingAddNoteField {
                             HStack {
                                 TextField("請輸入新戰術觀念筆記...", text: $newNoteText)
+                                    .font(.subheadline)
                                     .textFieldStyle(RoundedBorderTextFieldStyle())
                                     .foregroundColor(.black)
                                 
@@ -113,8 +115,8 @@ struct TacticalExplanationView: View {
                                         showingAddNoteField = false
                                     }
                                 }
-                                .font(.caption.bold())
-                                .padding(.horizontal, 10)
+                                .font(.subheadline.bold())
+                                .padding(.horizontal, 12)
                                 .padding(.vertical, 8)
                                 .background(Capsule().fill(Color.yellow))
                                 .foregroundColor(.black)
@@ -122,17 +124,18 @@ struct TacticalExplanationView: View {
                             .padding(.horizontal)
                         }
                         
-                        VStack(spacing: 8) {
+                        VStack(spacing: 10) {
                             ForEach(Array(store.customTacticalNotes.enumerated()), id: \.offset) { index, note in
-                                HStack(alignment: .top, spacing: 8) {
+                                HStack(alignment: .top, spacing: 12) {
                                     Image(systemName: "checkmark.seal.fill")
+                                        .font(.title3)
                                         .foregroundColor(.green)
                                         .padding(.top, 2)
                                     
                                     Text(note)
-                                        .font(.caption)
+                                        .font(.subheadline.bold()) // 加大筆記字體
                                         .foregroundColor(.white)
-                                        .lineSpacing(4)
+                                        .lineSpacing(5)
                                     
                                     Spacer()
                                     
@@ -140,21 +143,21 @@ struct TacticalExplanationView: View {
                                         store.customTacticalNotes.remove(at: index)
                                     }) {
                                         Image(systemName: "trash")
-                                            .font(.caption2)
-                                            .foregroundColor(.gray)
+                                            .font(.body)
+                                            .foregroundColor(.red.opacity(0.8))
                                     }
                                 }
-                                .padding(12)
-                                .background(RoundedRectangle(cornerRadius: 10).fill(Color(red: 0.12, green: 0.16, blue: 0.26)))
+                                .padding(14)
+                                .background(RoundedRectangle(cornerRadius: 12).fill(Color(red: 0.12, green: 0.16, blue: 0.26)))
                                 .padding(.horizontal)
                             }
                         }
                     }
                     
-                    // MARK: 4. Sound Test (扣球擊球音效試聽，哨音已刪除)
+                    // MARK: 4. Sound Test (扣球擊球音效試聽)
                     HStack {
                         Text("扣球/擊球音效試聽:")
-                            .font(.subheadline.bold())
+                            .font(.headline.bold())
                             .foregroundColor(.white)
                         Spacer()
                         Button(action: {
@@ -164,15 +167,15 @@ struct TacticalExplanationView: View {
                                 Image(systemName: "bolt.fill")
                                 Text("試聽擊球聲")
                             }
-                            .font(.caption.bold())
-                            .padding(.horizontal, 14)
-                            .padding(.vertical, 8)
+                            .font(.subheadline.bold())
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 10)
                             .background(Capsule().fill(Color.orange))
                             .foregroundColor(.white)
                         }
                     }
-                    .padding(14)
-                    .background(RoundedRectangle(cornerRadius: 12).fill(Color.white.opacity(0.06)))
+                    .padding(16)
+                    .background(RoundedRectangle(cornerRadius: 14).fill(Color.white.opacity(0.06)))
                     .padding(.horizontal)
                 }
                 .padding(.vertical)
@@ -184,7 +187,7 @@ struct TacticalExplanationView: View {
     }
 }
 
-// Unified Tactical Card Component
+// Unified Tactical Card Component (加大字體)
 struct UnifiedTacticalCard: View {
     let sectionNumber: String
     let title: String
@@ -193,45 +196,47 @@ struct UnifiedTacticalCard: View {
     let items: [String]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 10) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack {
                 Text(sectionNumber)
                     .font(.headline.bold())
                     .foregroundColor(.black)
-                    .padding(.horizontal, 8)
+                    .padding(.horizontal, 10)
                     .padding(.vertical, 4)
                     .background(Capsule().fill(color))
                 
                 Text(title)
-                    .font(.subheadline.bold())
+                    .font(.headline.bold()) // 加大標題字體
                     .foregroundColor(.white)
+                    .lineLimit(2)
                 
                 Spacer()
                 
                 Text(badge)
-                    .font(.caption2.bold())
-                    .padding(.horizontal, 6)
-                    .padding(.vertical, 2)
+                    .font(.caption.bold())
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 4)
                     .background(Capsule().fill(color.opacity(0.3)))
                     .foregroundColor(color)
             }
             
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 8) {
                 ForEach(items, id: \.self) { item in
-                    HStack(alignment: .top, spacing: 6) {
+                    HStack(alignment: .top, spacing: 8) {
                         Text("•")
+                            .font(.headline)
                             .foregroundColor(color)
                             .bold()
                         Text(item)
-                            .font(.caption)
-                            .foregroundColor(.gray)
-                            .lineSpacing(3)
+                            .font(.subheadline) // 加大說明字體至 15pt
+                            .foregroundColor(.white.opacity(0.9))
+                            .lineSpacing(4)
                     }
                 }
             }
         }
-        .padding(14)
-        .background(RoundedRectangle(cornerRadius: 12).fill(Color(red: 0.12, green: 0.16, blue: 0.26)))
+        .padding(16)
+        .background(RoundedRectangle(cornerRadius: 14).fill(Color(red: 0.12, green: 0.16, blue: 0.26)))
         .padding(.horizontal)
     }
 }

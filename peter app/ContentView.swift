@@ -71,108 +71,101 @@ struct TacticalBoardMainPage: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    // MARK: Top Navigation Header
-                    HStack(spacing: 12) {
-                        // Volleyball App Icon / Logo
-                        ZStack {
-                            Circle()
-                                .fill(
-                                    LinearGradient(
-                                        colors: [.yellow, .orange],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
+                    // MARK: Top Navigation Header (極簡修復，不直向換行)
+                    VStack(spacing: 8) {
+                        HStack(spacing: 10) {
+                            // Volleyball App Icon / Logo
+                            ZStack {
+                                Circle()
+                                    .fill(
+                                        LinearGradient(
+                                            colors: [.yellow, .orange],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        )
                                     )
-                                )
-                                .frame(width: 36, height: 36)
-                                .shadow(color: .orange.opacity(0.5), radius: 4)
+                                    .frame(width: 34, height: 34)
+                                    .shadow(color: .orange.opacity(0.5), radius: 4)
+                                
+                                Image(systemName: "volleyball.fill")
+                                    .font(.system(size: 18, weight: .bold))
+                                    .foregroundColor(.blue)
+                            }
                             
-                            Image(systemName: "volleyball.fill")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(.blue)
-                        }
-                        
-                        VStack(alignment: .leading, spacing: 2) {
+                            // App Title (固定單行，絕不垂直換行)
                             Text("排球戰術板")
                                 .customVolleyballTitle(size: 18, weight: .bold)
                                 .foregroundColor(.white)
+                                .lineLimit(1)
+                                .fixedSize()
                             
-                            HStack(spacing: 6) {
-                                Text("模式:")
-                                    .font(.caption2)
-                                    .foregroundColor(.gray)
-                                Text(store.tacticsMode.rawValue)
-                                    .font(.caption2.bold())
-                                    .foregroundColor(.yellow)
+                            Spacer()
+                            
+                            // Sound Toggle Button
+                            Button(action: {
+                                store.toggleSound()
+                            }) {
+                                Image(systemName: store.isSoundEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .padding(7)
+                                    .background(Circle().fill(store.isSoundEnabled ? Color.purple : Color.gray.opacity(0.4)))
+                            }
+                            
+                            // Toggle Control Panel Button (for compact portrait layout)
+                            if !isWideScreen && !isLandscape {
+                                Button(action: {
+                                    withAnimation(.spring()) {
+                                        showingSidebarOnPhone.toggle()
+                                    }
+                                }) {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "slider.horizontal.3")
+                                        Text(showingSidebarOnPhone ? "收起" : "設定")
+                                    }
+                                    .font(.caption.bold())
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 6)
+                                    .background(Capsule().fill(Color.yellow))
+                                    .foregroundColor(.black)
+                                }
+                            }
+                            
+                            // Quick Save Button
+                            Button(action: {
+                                showingSaveSheet = true
+                            }) {
+                                Image(systemName: "square.and.arrow.down")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .padding(7)
+                                    .background(Circle().fill(Color.green))
+                            }
+                            
+                            // Quick Load Button
+                            Button(action: {
+                                showingLoadSheet = true
+                            }) {
+                                Image(systemName: "folder")
+                                    .font(.system(size: 14, weight: .bold))
+                                    .foregroundColor(.white)
+                                    .padding(7)
+                                    .background(Circle().fill(Color.blue))
                             }
                         }
                         
-                        Spacer()
-                        
-                        // Mode Quick Selector (模式切換)
+                        // Mode Segmented Switch Bar (寬敞獨立模式列)
                         Picker("", selection: Binding(
                             get: { store.tacticsMode },
                             set: { store.setTacticsMode($0) }
                         )) {
-                            Text("攻擊").tag(TacticsMode.attack)
-                            Text("3人接發").tag(TacticsMode.serveReceive)
+                            Label("🏐 攻擊戰術推演", systemImage: "bolt.circle.fill").tag(TacticsMode.attack)
+                            Label("🛡️ 3人接發球陣型", systemImage: "shield.inset.filled").tag(TacticsMode.serveReceive)
                         }
                         .pickerStyle(SegmentedPickerStyle())
-                        .frame(width: 130)
-                        
-                        // Sound Toggle Button (扣球音效切換)
-                        Button(action: {
-                            store.toggleSound()
-                        }) {
-                            Image(systemName: store.isSoundEnabled ? "speaker.wave.2.fill" : "speaker.slash.fill")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(.white)
-                                .padding(7)
-                                .background(Circle().fill(store.isSoundEnabled ? Color.purple : Color.gray.opacity(0.4)))
-                        }
-                        
-                        // Toggle Control Panel Button (for compact portrait layout)
-                        if !isWideScreen && !isLandscape {
-                            Button(action: {
-                                withAnimation(.spring()) {
-                                    showingSidebarOnPhone.toggle()
-                                }
-                            }) {
-                                HStack(spacing: 4) {
-                                    Image(systemName: "slider.horizontal.3")
-                                    Text(showingSidebarOnPhone ? "收起" : "設定")
-                                }
-                                .font(.caption.bold())
-                                .padding(.horizontal, 10)
-                                .padding(.vertical, 6)
-                                .background(Capsule().fill(Color.yellow))
-                                .foregroundColor(.black)
-                            }
-                        }
-                        
-                        // Quick Save Button
-                        Button(action: {
-                            showingSaveSheet = true
-                        }) {
-                            Image(systemName: "square.and.arrow.down")
-                                .font(.system(size: 15, weight: .bold))
-                                .foregroundColor(.white)
-                                .padding(7)
-                                .background(Circle().fill(Color.green))
-                        }
-                        
-                        // Quick Load Button
-                        Button(action: {
-                            showingLoadSheet = true
-                        }) {
-                            Image(systemName: "folder")
-                                .font(.system(size: 15, weight: .bold))
-                                .foregroundColor(.white)
-                                .padding(7)
-                                .background(Circle().fill(Color.blue))
-                        }
                     }
                     .padding(.horizontal, 14)
-                    .padding(.vertical, 10)
+                    .padding(.vertical, 8)
                     .background(Color(red: 0.10, green: 0.14, blue: 0.22))
                     .shadow(radius: 4)
                     
